@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Création IA — La Maison Valmont</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #b8944f;
+            --gold-light: #d4b978;
+            --noir: #1a1a1a;
+            --blanc: #fafaf8;
+            --gris: #6b6b6b;
+            --gris-clair: #e8e6e3;
+            --transition: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--blanc);
+            color: var(--noir);
+            line-height: 1.6;
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        /* HEADER */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(250, 250, 248, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--gris-clair);
+            transition: all 0.3s var(--transition);
+        }
+
+        header.scrolled {
+            padding: 1rem 3rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--noir);
+        }
+
+        nav a {
+            font-size: 0.75rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--gris);
+            margin-left: 2.5rem;
+            transition: color 0.3s var(--transition);
+        }
+
+        nav a:hover {
+            color: var(--gold);
+        }
+
+        /* HERO */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(184, 148, 79, 0.03) 0%, transparent 70%);
+        }
+
+        .hero-subtitle {
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 300;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        .hero p {
+            max-width: 560px;
+            font-size: 0.9rem;
+            color: var(--gris);
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        .scroll-indicator span {
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gris);
+        }
+
+        .scroll-indicator::after {
+            content: '';
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* SECTIONS */
+        section {
+            padding: 8rem 3rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-header .label {
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .section-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            max-width: 500px;
+            margin: 0 auto;
+            font-size: 0.85rem;
+            color: var(--gris);
+            line-height: 1.8;
+        }
+
+        /* GALLERY GRID */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 4/5;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s var(--transition);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .gallery-item .overlay {
+            display: none;
+        }
+
+        /* FEATURED (LARGE) */
+        .featured-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .featured-item {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 3/4;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+
+        .featured-item.wide {
+            grid-column: span 2;
+            aspect-ratio: 21/9;
+        }
+
+        .featured-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1s var(--transition);
+        }
+
+        .featured-item:hover img {
+            transform: scale(1.03);
+        }
+
+        /* VIDEO SECTION */
+        .video-section {
+            background: var(--noir);
+            padding: 8rem 3rem;
+        }
+
+        .video-section .section-header .label {
+            color: var(--gold-light);
+        }
+
+        .video-section .section-header h2 {
+            color: white;
+        }
+
+        .video-section .section-header p {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .video-container {
+            max-width: 500px;
+            margin: 0 auto;
+            border-radius: 3px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+        }
+
+        .video-container video {
+            width: 100%;
+            display: block;
+        }
+
+        /* PROCESS */
+        .process-section {
+            background: linear-gradient(180deg, var(--blanc) 0%, #f5f4f2 100%);
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .process-step {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .process-step .number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: var(--gold);
+            font-weight: 300;
+            margin-bottom: 1rem;
+            opacity: 0.7;
+        }
+
+        .process-step h3 {
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-weight: 500;
+            margin-bottom: 0.8rem;
+        }
+
+        .process-step p {
+            font-size: 0.8rem;
+            color: var(--gris);
+            line-height: 1.7;
+        }
+
+        /* TOOLS */
+        .tools-list {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            max-width: 800px;
+            margin: 3rem auto 0;
+        }
+
+        .tool-badge {
+            padding: 0.6rem 1.5rem;
+            border: 1px solid var(--gris-clair);
+            border-radius: 100px;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gris);
+            transition: all 0.3s var(--transition);
+        }
+
+        .tool-badge:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 4rem 3rem;
+            text-align: center;
+            border-top: 1px solid var(--gris-clair);
+        }
+
+        footer .name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+
+        footer .contact {
+            font-size: 0.75rem;
+            color: var(--gris);
+            letter-spacing: 0.05em;
+        }
+
+        footer .contact a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        footer .note {
+            margin-top: 2rem;
+            font-size: 0.7rem;
+            color: var(--gris);
+            font-style: italic;
+        }
+
+        /* LIGHTBOX */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            padding: 2rem;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 2px;
+        }
+
+        .lightbox .close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .lightbox .close:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        /* ANIMATIONS */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s var(--transition), transform 0.8s var(--transition);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 1.5rem;
+            }
+
+            nav a {
+                margin-left: 1.5rem;
+                font-size: 0.65rem;
+            }
+
+            section {
+                padding: 5rem 1.5rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .featured-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .featured-item.wide {
+                grid-column: span 1;
+                aspect-ratio: 4/5;
+            }
+
+            .process-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="logo">Portfolio Création IA</div>
+        <nav>
+            <a href="#collection-1">Bubble Falls</a>
+            <a href="#collection-2">Storie Veneziane</a>
+            <a href="#video">Vidéo</a>
+            <a href="#process">Approche</a>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <span class="hero-subtitle">La Maison Valmont — Exploration Créative</span>
+        <h1>Création Visuelle<br>par Intelligence Artificielle</h1>
+        <p>Exploration des possibilités offertes par l'IA générative pour la mise en valeur des collections Valmont. Imagerie produit, compositions artistiques et motion design.</p>
+        <div class="scroll-indicator">
+            <span>Découvrir</span>
+        </div>
+    </section>
+
+    <!-- COLLECTION 1 : BUBBLE FALLS -->
+    <section id="collection-1">
+        <div class="section-header fade-in">
+            <span class="label">Collection I</span>
+            <h2>Bubble Falls</h2>
+            <p>Mise en scène immersive du produit à travers des compositions luxueuses, flat-lays soignés et close-ups extrêmes générés par IA.</p>
+        </div>
+
+        <div class="gallery-grid fade-in">
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="Renders_Bubble Falls/magnific_professional-product-phot_jSaH35CLD0.png" alt="Professional product photo" loading="lazy">
+                <div class="overlay">
+                    <span class="tag">Packshot IA</span>
+                    <span class="title">Éclairage studio</span>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="Renders_Bubble Falls/magnific_dynamic-shot-of-valmont-p_5x8uMnvKxe.png" alt="Dynamic shot" loading="lazy">
+                <div class="overlay">
+                    <span class="tag">Dynamique</span>
+                    <span class="title">Mouvement & texture</span>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="Renders_Bubble Falls/magnific_extreme-closeup-of-valmon_DBiW4sOpcl.png" alt="Extreme closeup" loading="lazy">
+                <div class="overlay">
+                    <span class="tag">Macro</span>
+                    <span class="title">Détail extrême</span>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="Renders_Bubble Falls/magnific_extreme-closeup-of-valmon_jSa5PbCLD0.png" alt="Closeup texture" loading="lazy">
+                <div class="overlay">
+                    <span class="tag">Macro</span>
+                    <span class="title">Texture & matière</span>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="Renders_Bubble Falls/magnific_flat-lay-composition-with_0p4GhnCTfW.png" alt="Flat lay composition" loading="lazy">
+                <div class="overlay">
+                    <span class="tag">Flat Lay</span>
+                    <span class="title">Composition éditoriale</span>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="Renders_Bubble Falls/magnific_flat-lay-composition-with_EqD8SGDuuO.png" alt="Flat lay" loading="lazy">
+                <div class="overlay">
+                    <span class="tag">Flat Lay</span>
+                    <span class="title">Nature morte luxe</span>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="Renders_Bubble Falls/magnific_photo-a-womans-hands-disp_KjIQzLtkqp.png" alt="Hands displaying product" loading="lazy">
+                <div class="overlay">
+                    <span class="tag">Lifestyle</span>
+                    <span class="title">Geste & élégance</span>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="Renders_Bubble Falls/magnific_valmont-product-in-minima_cDPRaR80eP.png" alt="Minimal product shot" loading="lazy">
+                <div class="overlay">
+                    <span class="tag">Minimaliste</span>
+                    <span class="title">Pureté & espace</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COLLECTION 2 : STORIE VENEZIANE -->
+    <section id="collection-2" style="background: #f5f4f2;">
+        <div class="section-header fade-in">
+            <span class="label">Collection II</span>
+            <h2>Storie Veneziane</h2>
+            <p>L'univers olfactif vénitien de La Maison Valmont transcrit en images. Compositions précieuses et ambiances baroques sublimées par l'IA.</p>
+        </div>
+
+        <div class="gallery-grid fade-in">
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="Renders_Storie Veneziane/magnific_professional-product-phot_tfYXFyTmZJ.png" alt="Storie Veneziane product" loading="lazy">
+                <div class="overlay">
+                    <span class="tag">Packshot IA</span>
+                    <span class="title">Flacon sculptural</span>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="Renders_Storie Veneziane/magnific_extreme-closeup-of-lamais_po30arSehw.png" alt="Extreme closeup Veneziane" loading="lazy">
+                <div class="overlay">
+                    <span class="tag">Macro</span>
+                    <span class="title">Détail vénitien</span>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="Renders_Storie Veneziane/magnific_flat-lay-composition-with_5x8QOgfKxe.png" alt="Flat lay Veneziane" loading="lazy">
+                <div class="overlay">
+                    <span class="tag">Flat Lay</span>
+                    <span class="title">Composition baroque</span>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="Renders_Storie Veneziane/magnific_flat-lay-composition-with_Xt2MEqeBfo.png" alt="Flat lay composition" loading="lazy">
+                <div class="overlay">
+                    <span class="tag">Flat Lay</span>
+                    <span class="title">Nature morte vénitienne</span>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="Renders_Storie Veneziane/magnific_flat-lay-composition-with_dIZVvTRXSL.png" alt="Flat lay Storie" loading="lazy">
+                <div class="overlay">
+                    <span class="tag">Flat Lay</span>
+                    <span class="title">Opulence & raffinement</span>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="Renders_Storie Veneziane/magnific_lamaisonvalmont-product-i_DBicmu0pcl.png" alt="Product in context" loading="lazy">
+                <div class="overlay">
+                    <span class="tag">Ambiance</span>
+                    <span class="title">Univers immersif</span>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="Renders_Storie Veneziane/magnific_lamaisonvalmont-product-i_DBicvL8pcl.png" alt="Product imagery" loading="lazy">
+                <div class="overlay">
+                    <span class="tag">Ambiance</span>
+                    <span class="title">Palazzo & lumière</span>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="Renders_Storie Veneziane/magnific_replace-the-perfume-bottl_3Gs43NoREY.png" alt="Storie Veneziane composition" loading="lazy">
+                <div class="overlay">
+                    <span class="tag">Composition</span>
+                    <span class="title">Création IA</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VIDEO -->
+    <section id="video" class="video-section">
+        <div class="section-header fade-in">
+            <span class="label">Motion Design</span>
+            <h2>Animation Produit</h2>
+            <p>Animation produit générée par IA pour la collection Storie Veneziane.</p>
+        </div>
+
+        <div class="video-container fade-in">
+            <video controls poster="" preload="metadata">
+                <source src="Renders_Storie Veneziane/Instagram Reel vertical 9-16 (1080x1920).mp4" type="video/mp4">
+                Votre navigateur ne supporte pas la lecture vidéo.
+            </video>
+        </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section id="process" class="process-section">
+        <div class="section-header fade-in">
+            <span class="label">Méthodologie</span>
+            <h2>Approche Créative</h2>
+            <p>Un processus maîtrisé alliant direction artistique humaine et puissance de l'IA générative.</p>
+        </div>
+
+        <div class="process-grid fade-in">
+            <div class="process-step">
+                <div class="number">01</div>
+                <h3>Direction Artistique</h3>
+                <p>Analyse de l'univers de marque, définition des codes visuels et brief créatif aligné sur l'ADN Valmont.</p>
+            </div>
+            <div class="process-step">
+                <div class="number">02</div>
+                <h3>Génération IA</h3>
+                <p>Prompting avancé et itérations successives pour atteindre le niveau d'exigence requis par le luxe.</p>
+            </div>
+            <div class="process-step">
+                <div class="number">03</div>
+                <h3>Upscaling & Retouche</h3>
+                <p>Magnification haute résolution et retouches fines pour un rendu print-ready et digital-first.</p>
+            </div>
+        </div>
+
+        <div class="tools-list fade-in">
+            <span class="tool-badge">Google Banana Pro 2</span>
+            <span class="tool-badge">Seedance</span>
+            <span class="tool-badge">LTX</span>
+            <span class="tool-badge">Wan</span>
+            <span class="tool-badge">ComfyUI</span>
+            <span class="tool-badge">Premiere Pro</span>
+            <span class="tool-badge">After Effects</span>
+            <span class="tool-badge">Photoshop</span>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="name">Michaël Pedrosa</div>
+        <div class="contact">
+            Portfolio réalisé dans le cadre d'une candidature auprès de <a href="https://www.lamaisonvalmont.com/fr/" target="_blank">La Maison Valmont</a>
+        </div>
+        <div class="note">Toutes les images présentées ont été générées par intelligence artificielle à des fins de démonstration créative.</div>
+    </footer>
+
+    <!-- LIGHTBOX -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <div class="close">✕</div>
+        <img src="" alt="Vue agrandie" id="lightbox-img">
+    </div>
+
+    <script>
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            header.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Fade-in on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Lightbox
+        function openLightbox(item) {
+            const img = item.querySelector('img');
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            lightboxImg.src = img.src;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+    </script>
+
+</body>
+</html>
